@@ -1,15 +1,13 @@
 package com.amazon.Transaction;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.amazon.Stock.Stock;
 import com.amazon.Stock.StockDatabase;
@@ -162,54 +160,57 @@ public void sellShares(User user, StockDatabase stocksDb) {
  public static void viewTransactionReportForDate(LinkedList<Transaction> transactionReport){
 	 
 	 String date;
-//	 Date startDate = null, endDate = null;
-	 LocalDate startDate = null, endDate = null;
+	 LocalDate tempDate = null, startDate, endDate;
 	 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd");
 	 Scanner sc =  new Scanner(System.in);
-	 System.out.print("\n>> Enter the start date in (yyyy-mm-dd) format: ");
-	 while(startDate==null) {
+	 System.out.print(">> Enter the start date in (yyyy-mm-dd) format: ");
+	 while(tempDate==null) {
 		 date = sc.nextLine();
 		 try {
-			 startDate = LocalDate.parse(date, dateFormat);
-//			 startDate = new SimpleDateFormat("yyyy-mm-dd").parse(date);		 
+			 tempDate = LocalDate.parse(date, dateFormat);
 		 }catch (DateTimeParseException e) {
-			 System.out.print("\n>> Sorry, that's not a valid date. Please enter date in (yyyy-mm-dd) format: ");
+			 System.out.print("\n>> Sorry, that's not a valid date. Please enter date in proper format: ");
 		 }
 	 }
-	 System.out.print("\n>> Enter the end date in (yyyy-mm-dd) format: ");
-	 while(endDate==null) {
+	 startDate = tempDate;
+	 tempDate = null;
+	 System.out.print(">> Enter the end date in (yyyy-mm-dd) format: ");
+	 while(tempDate==null) {
 		 date = sc.nextLine();
 		 try {
-			 endDate = LocalDate.parse(date, dateFormat);
-//			 endDate = new SimpleDateFormat("yyyy-mm-dd").parse(date);		 
+			 tempDate = LocalDate.parse(date, dateFormat);	 
 		 }catch (DateTimeParseException e) {
-			 System.out.print("\n>> Sorry, that's not a valid date. Please enter date in (yyyy-mm-dd) format: ");
+			 System.out.print("\n>> Sorry, that's not a valid date. Please enter date in proper format: ");
 		 }
 	 }
-
-	System.out.println("*********************************************");
-	System.out.println("          Transaction Report");
-	System.out.println("*********************************************");
-	for(Transaction t : transactionReport) {
-		if(t.transactionDate.isAfter(startDate)  && t.transactionDate.isBefore(endDate)) {
-			System.out.println(t);	
-		}
-	}
+	 endDate = tempDate;
+	 List<Transaction> filteredTransactions = transactionReport.stream().filter(t-> t.transactionDate.isAfter(startDate)  && t.transactionDate.isBefore(endDate)).collect(Collectors.toList());
+	 if(filteredTransactions.size()>=1) {
+		System.out.println("*********************************************");
+		System.out.println("          Transaction Report");
+		System.out.println("*********************************************");
+		for(Transaction t : filteredTransactions)
+				System.out.println(t);	
+	}else {
+        System.out.println("No Transactions available in the given Date range !");
+	} 
  }
  
  public static void viewTransactionReportForShare(LinkedList<Transaction> transactionReport){
 	 
 	Scanner sc =  new Scanner(System.in);
-	System.out.println("Enter the share name:");
+	System.out.print(">>Enter the share name: ");
 	String shareName = sc.nextLine();
-	System.out.println("*********************************************");
-	System.out.println("          Transaction Report");
-	System.out.println("*********************************************");
-	for(Transaction t : transactionReport) {
-		if(t.shareName.equals(shareName)) {
-			System.out.println(t);	
-		}
-	}
+	List<Transaction> filteredTransactions = transactionReport.stream().filter(t-> t.shareName.equals(shareName)).collect(Collectors.toList());
+    if(filteredTransactions.size()>=1) {
+    	System.out.println("*********************************************");
+    	System.out.println("          Transaction Report");
+    	System.out.println("*********************************************");
+    	for(Transaction t : filteredTransactions)
+    			System.out.println(t);	
+    }else {
+        System.out.println("No Transactions available for the given share !");
+    }
  }
  
  public static void viewAllTransactions(LinkedList<Transaction> transactionReport){
@@ -237,9 +238,9 @@ public void sellShares(User user, StockDatabase stocksDb) {
 		transactionReport.add(t3);
 		transactionReport.add(t4);
 
-//		TransactionAPI.viewTransactionReportForDate(transactionReport);
+		TransactionAPI.viewTransactionReportForDate(transactionReport);
 //		TransactionAPI.viewTransactionReportForShare(transactionReport);
-		TransactionAPI.viewAllTransactions(transactionReport);
+//		TransactionAPI.viewAllTransactions(transactionReport);
 		
 //        Stock s1 = new Stock("Amazon",100,500);
 //        Stock s2 = new Stock("Flipkart",90,500);
