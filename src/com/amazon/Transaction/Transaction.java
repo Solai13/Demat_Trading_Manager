@@ -31,7 +31,7 @@ public class Transaction {
 	public String toString() {
 		
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("\n*********************************************");
+		buffer.append("---------------------------------------------");
 		buffer.append("\n Transaction ID:"+transactionID);
 		buffer.append("\n Transaction Date:"+transactionDate);
 		buffer.append("\n Transaction Time:"+transactionTime);
@@ -40,7 +40,7 @@ public class Transaction {
 		buffer.append("\n Price of Share per unit:"+sharePricePerUnit);
 		buffer.append("\n Number of shares transacted:"+numberOfShares);
 		buffer.append("\n Transaction Amount:"+transactionAmount);
-		buffer.append("\n*********************************************");
+		buffer.append("\n---------------------------------------------");
 		return buffer.toString();
 	}
 	

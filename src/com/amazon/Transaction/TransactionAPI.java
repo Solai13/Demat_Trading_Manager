@@ -1,8 +1,12 @@
 package com.amazon.Transaction;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -157,41 +161,62 @@ public void sellShares(User user, StockDatabase stocksDb) {
   
  public static void viewTransactionReportForDate(LinkedList<Transaction> transactionReport){
 	 
-	Scanner sc =  new Scanner(System.in);
-	System.out.println("Enter the start date:");
-	System.out.println("Enter the start year:");
-	int startYear = sc.nextInt();
-	 	System.out.println("---------------------------------------------");
-		System.out.println("          Transaction Report");
-		System.out.println("---------------------------------------------");
-		for(Transaction t : transactionReport) {
-			System.out.println(t);
+	 String date;
+//	 Date startDate = null, endDate = null;
+	 LocalDate startDate = null, endDate = null;
+	 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+	 Scanner sc =  new Scanner(System.in);
+	 System.out.print("\n>> Enter the start date in (yyyy-mm-dd) format: ");
+	 while(startDate==null) {
+		 date = sc.nextLine();
+		 try {
+			 startDate = LocalDate.parse(date, dateFormat);
+//			 startDate = new SimpleDateFormat("yyyy-mm-dd").parse(date);		 
+		 }catch (DateTimeParseException e) {
+			 System.out.print("\n>> Sorry, that's not a valid date. Please enter date in (yyyy-mm-dd) format: ");
+		 }
+	 }
+	 System.out.print("\n>> Enter the end date in (yyyy-mm-dd) format: ");
+	 while(endDate==null) {
+		 date = sc.nextLine();
+		 try {
+			 endDate = LocalDate.parse(date, dateFormat);
+//			 endDate = new SimpleDateFormat("yyyy-mm-dd").parse(date);		 
+		 }catch (DateTimeParseException e) {
+			 System.out.print("\n>> Sorry, that's not a valid date. Please enter date in (yyyy-mm-dd) format: ");
+		 }
+	 }
+
+	System.out.println("*********************************************");
+	System.out.println("          Transaction Report");
+	System.out.println("*********************************************");
+	for(Transaction t : transactionReport) {
+		if(t.transactionDate.isAfter(startDate)  && t.transactionDate.isBefore(endDate)) {
+			System.out.println(t);	
 		}
+	}
  }
  
  public static void viewTransactionReportForShare(LinkedList<Transaction> transactionReport){
 	 
 	Scanner sc =  new Scanner(System.in);
-	System.out.println("Enter the start date:");
-	System.out.println("Enter the start year:");
-	int startYear = sc.nextInt();
-	 	System.out.println("---------------------------------------------");
-		System.out.println("          Transaction Report");
-		System.out.println("---------------------------------------------");
-		for(Transaction t : transactionReport) {
-			System.out.println(t);
+	System.out.println("Enter the share name:");
+	String shareName = sc.nextLine();
+	System.out.println("*********************************************");
+	System.out.println("          Transaction Report");
+	System.out.println("*********************************************");
+	for(Transaction t : transactionReport) {
+		if(t.shareName.equals(shareName)) {
+			System.out.println(t);	
 		}
+	}
  }
  
- public static void viewTransactionReport(LinkedList<Transaction> transactionReport){
+ public static void viewAllTransactions(LinkedList<Transaction> transactionReport){
 	 
-	Scanner sc =  new Scanner(System.in);
-	System.out.println("Enter the start date:");
-	System.out.println("Enter the start year:");
-	int startYear = sc.nextInt();
-	 	System.out.println("---------------------------------------------");
+		System.out.println("*********************************************");
 		System.out.println("          Transaction Report");
-		System.out.println("---------------------------------------------");
+		System.out.println("*********************************************");
 		for(Transaction t : transactionReport) {
 			System.out.println(t);
 		}
@@ -203,44 +228,45 @@ public void sellShares(User user, StockDatabase stocksDb) {
 		
 		
 		
-//		Transaction t1 = new Transaction(101, "Buy", LocalDate.of(2019, 12, 12), LocalTime.of(03, 35));
-//		Transaction t2 = new Transaction(102, "Buy", LocalDate.of(2019, 12, 20), LocalTime.of(04, 20));
-//		Transaction t3 = new Transaction(103, "Sell", LocalDate.of(2020, 01, 15), LocalTime.of(9, 40));
-//		Transaction t4 = new Transaction(104, "Buy", LocalDate.of(2020, 02, 12), LocalTime.of(02, 15));
-//		
-//		transactionReport.add(t1);
-//		transactionReport.add(t2);
-//		transactionReport.add(t3);
-//		transactionReport.add(t4);
-//		
-//		TransactionAPI.viewTransactionReport(transactionReport);
+		Transaction t1 = new Transaction(101, "Buy", LocalDate.of(2019, 12, 12), LocalTime.of(03, 35), "Amazon", 1500.00, 3, 4500.00);
+		Transaction t2 = new Transaction(102, "Buy", LocalDate.of(2019, 12, 20), LocalTime.of(04, 20), "Walmart", 1200.00, 2, 2400.00);
+		Transaction t3 = new Transaction(103, "Sell", LocalDate.of(2020, 01, 15), LocalTime.of(9, 40), "Amazon", 1500.00, 1, 1500.00);
+		Transaction t4 = new Transaction(104, "Buy", LocalDate.of(2020, 02, 12), LocalTime.of(02, 15), "Target", 1000.00, 5, 5000.00);
+		transactionReport.add(t1);
+		transactionReport.add(t2);
+		transactionReport.add(t3);
+		transactionReport.add(t4);
+
+//		TransactionAPI.viewTransactionReportForDate(transactionReport);
+//		TransactionAPI.viewTransactionReportForShare(transactionReport);
+		TransactionAPI.viewAllTransactions(transactionReport);
 		
-        Stock s1 = new Stock("Amazon",100,500);
-        Stock s2 = new Stock("Flipkart",90,500);
-        Stock s3 = new Stock("Walmart",80,500);
-        Stock s4 = new Stock("Jabong",70,500);
-        Stock s5 = new Stock("Myntra",60,500);
-        Stock s6 = new Stock("koovs",50,500);
-        Stock s7 = new Stock("nike",40,500);
-        
-        LinkedList<Stock> stockDBList = new LinkedList<Stock>();
-        stockDBList.add(s1);
-        stockDBList.add(s2);
-        stockDBList.add(s3);
-        stockDBList.add(s4);
-        stockDBList.add(s5);
-        stockDBList.add(s6);
-        stockDBList.add(s7);
-        
-        StockHandler BSE = new StockHandler(stockDBList);
+//        Stock s1 = new Stock("Amazon",100,500);
+//        Stock s2 = new Stock("Flipkart",90,500);
+//        Stock s3 = new Stock("Walmart",80,500);
+//        Stock s4 = new Stock("Jabong",70,500);
+//        Stock s5 = new Stock("Myntra",60,500);
+//        Stock s6 = new Stock("koovs",50,500);
+//        Stock s7 = new Stock("nike",40,500);
+//        
+//        LinkedList<Stock> stockDBList = new LinkedList<Stock>();
+//        stockDBList.add(s1);
+//        stockDBList.add(s2);
+//        stockDBList.add(s3);
+//        stockDBList.add(s4);
+//        stockDBList.add(s5);
+//        stockDBList.add(s6);
+//        stockDBList.add(s7);
+//        
+//        StockHandler BSE = new StockHandler(stockDBList);
 
         
         
 
-		
-		    String sDate1="31/12/1998";  
-		    Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);  
-		    System.out.println(sDate1+"\t"+date1);
+//		
+//		    String sDate1="31/12/1998";  
+//		    Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);  
+//		    System.out.println(sDate1+"\t"+date1);
 	}
 	
 
