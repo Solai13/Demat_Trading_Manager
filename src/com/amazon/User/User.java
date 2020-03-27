@@ -1,33 +1,57 @@
 package com.amazon.User;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
+import com.amazon.Stock.Stock;
 import com.amazon.Stock.StockHandler;
 import com.amazon.Transaction.Transaction;
 
-public class User {
+@SuppressWarnings("serial")
+public class User implements Serializable{
 	
-	public String user;
-	public String pass;
-	public Double money;
-	public String uniqueID;
-	public int shares;
+	public String userName;
+	public String passWord;
+	private Double money;
+	public Integer accountNumber;
+//	public int shares;
 	public LinkedList<Transaction> transactionReport;
 //	public LinkedList<Stock> userStockList;
 	public StockHandler userHandler;
 	
-    public User(String user, String pass, Double money, String uniqueID, int shares) {
-          this.user = user;
-          this.pass = pass;
-          this.money = money;
-          this.uniqueID = uniqueID;
-          this.shares = shares;
-    }
-    
-    @Override
-    public String toString() {
-          return "User [user=" + user + ", pass=" + pass + ", money=" + money + ", uniqueID=" + uniqueID +", shares=" + shares +"]";
+    public User(String userName, String passWord, double money, Integer accountNumber) {
+	this.userName = userName;
+	this.passWord = passWord;
+	this.money = money;
+	this.accountNumber = accountNumber;
+	transactionReport = new LinkedList<Transaction>();
+	userHandler = new StockHandler();
     }
 
+	public Double getMoney() {
+		return money;
+	}
 
+	public void setMoney(Double money) {
+		this.money = money;
+	}
+
+	@Override
+	public String toString() {
+		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("------------- DMAT Account details -------------");
+		buffer.append("\n User Name: "+userName);
+		buffer.append("\n Account Number: "+accountNumber);
+		buffer.append("\n Money in the account: \u20B9"+money);
+		if(!userHandler.stockList.isEmpty()) {
+			buffer.append("\n *********** List of shares in posessions ***********\n");
+			for(Stock stock : userHandler.stockList) {
+				buffer.append(stock);
+	        }	
+		}
+		buffer.append("\n----------------------------------------");
+		return buffer.toString();
+	}
+  
 }

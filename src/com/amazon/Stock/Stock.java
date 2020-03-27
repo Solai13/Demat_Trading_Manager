@@ -1,33 +1,44 @@
 package com.amazon.Stock;
 
-public class Stock {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Stock implements Serializable{
 	
-	public String Sharename;
-	public double Shareprice;
-    public int Availableshares;
+	public String shareName;
+	private double sharePrice;
+	public int numberOfShares;
     
     public Stock(){
-          Sharename = "NA";
-          Shareprice = 0;
-          Availableshares = 0;
+    	shareName = "NA";
+		sharePrice = 0.0;
+		numberOfShares = 0;
     }
     
-    public Stock(String Sharename, double Shareprice, int Availableshares) {
-          this.Sharename = Sharename;
-          this.Shareprice = Shareprice;
-          this.Availableshares = Availableshares;
+    public Stock(String shareName, double sharePrice, int numberOfShares) {
+    	this.shareName = shareName;
+		this.sharePrice = sharePrice;
+		this.numberOfShares = numberOfShares;
     }
     
-    void updateShares(String Sharename,int quantity){
-          this.Availableshares = quantity;
+    public double getSharePrice() {
+		return sharePrice;
+	}
+    
+	void updateShares(int quantity){
+          this.numberOfShares = quantity;
     }
     
-    boolean showShareDetails() {
-          System.out.println("######## "+Sharename+" ########\n");
-          System.out.println("Shareprice: \u20b9"+Shareprice);
-          System.out.println("Availableshares: "+Availableshares+" Availableshares");
-           System.out.println("########################"+"\n");
-          return false;
-    }
+    @Override
+	public String toString() {
+		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("...............................................");
+		buffer.append("\n Share Name: "+shareName);
+		buffer.append("\n Price of Share per unit: \u20b9"+sharePrice);
+		buffer.append("\n Number of shares available: "+numberOfShares);
+		buffer.append("\n...............................................");
+		return buffer.toString();
+	}
 
 }

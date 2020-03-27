@@ -1,9 +1,11 @@
 package com.amazon.Transaction;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Transaction {
+@SuppressWarnings("serial")
+public class Transaction implements Serializable{
 	
 	public int transactionID;
 	public String transactionType;
@@ -32,14 +34,14 @@ public class Transaction {
 		
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("---------------------------------------------");
-		buffer.append("\n Transaction ID:"+transactionID);
-		buffer.append("\n Transaction Date:"+transactionDate);
-		buffer.append("\n Transaction Time:"+transactionTime);
-		buffer.append("\n Transaction Type:"+transactionType);
-		buffer.append("\n Share Name:"+shareName);
-		buffer.append("\n Price of Share per unit:"+sharePricePerUnit);
-		buffer.append("\n Number of shares transacted:"+numberOfShares);
-		buffer.append("\n Transaction Amount:"+transactionAmount);
+		buffer.append("\n Transaction ID: "+transactionID);
+		buffer.append("\n Transaction Date: "+transactionDate);
+		buffer.append("\n Transaction Time: "+transactionTime);
+		buffer.append("\n Transaction Type: "+transactionType);
+		buffer.append("\n Share Name: "+shareName);
+		buffer.append("\n Price of Share per unit: "+sharePricePerUnit);
+		buffer.append("\n Number of shares transacted: "+numberOfShares);
+		buffer.append("\n Transaction Amount: \u20b9"+transactionAmount);
 		buffer.append("\n---------------------------------------------");
 		return buffer.toString();
 	}
