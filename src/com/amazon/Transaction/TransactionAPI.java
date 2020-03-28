@@ -121,10 +121,7 @@ public class TransactionAPI {
 	        		 	return true;
             	 }
             	 else
-            		 return false; //it will go to main menu option to reselect buy option            	 
-//             }
-//             System.out.println("Insufficient balance in your Account.");
-//             return false;
+            		 return false; //it will go to main menu option to reselect buy option
       }
   }
 

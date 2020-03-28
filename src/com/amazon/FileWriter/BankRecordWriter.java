@@ -61,13 +61,13 @@ public class BankRecordWriter {
 	
 	public static StockHandler writeDummyStockData() {
 		
-      Stock s1 = new Stock("Amazon",100,500);
-      Stock s2 = new Stock("Flipkart",90,500);
-      Stock s3 = new Stock("Walmart",80,500);
-      Stock s4 = new Stock("Jabong",70,500);
-      Stock s5 = new Stock("Myntra",60,500);
-      Stock s6 = new Stock("Puma",50,500);
-      Stock s7 = new Stock("Nike",40,500);
+      Stock s1 = new Stock("Amazon",1900.10,100);
+      Stock s2 = new Stock("Flipkart",890.75,100);
+      Stock s3 = new Stock("Walmart",1109.58,100);
+      Stock s4 = new Stock("Jabong",305.40,500);
+      Stock s5 = new Stock("Myntra",430.50,500);
+      Stock s6 = new Stock("Puma",55.95,1000);
+      Stock s7 = new Stock("Nike",83.23,1000);
       
       LinkedList<Stock> stockDBList = new LinkedList<Stock>();
       stockDBList.add(s1);
