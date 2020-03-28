@@ -74,9 +74,17 @@ public class TransactionAPI {
       if(BSE.checkShare(shareName))
     	  bseStock = BSE.fetchStocks(shareName);
       else
-    	  return false; //it will go to main menu option to reselect buy option    	  
-      System.out.println("Enter the number of shares you'd like to buy:");
-      sharesToBuy = in.nextInt();
+    	  return false; //it will go to main menu option to reselect buy option
+      while(true) {
+    	  System.out.println("Enter the number of shares you'd like to buy:");
+    	  sharesToBuy = in.nextInt();
+	        if(sharesToBuy > 0) {
+		        break;	
+	        }else {
+	        	System.out.println(">> Enter a number greater than 0 !");
+	        	continue;
+	        }
+      }
       
       if(sharesToBuy > bseStock.numberOfShares) {
              System.out.println("You cannot buy shares more than the available shares. Please re-try again");
@@ -134,8 +142,16 @@ public class TransactionAPI {
     	  System.out.println("Share not available");
     	  return false;
       }
-      System.out.println("Enter the number of shares you'd like to sell:");
-      sharesToSell = in.nextInt();
+      while(true) {
+    	  System.out.println("Enter the number of shares you'd like to sell:");
+          sharesToSell = in.nextInt();
+	        if(sharesToSell > 0) {
+		        break;	
+	        }else {
+	        	System.out.println(">> Enter a number greater than 0 !");
+	        	continue;
+	        }
+      }
       
       if(sharesToSell > userStock.numberOfShares) {
              System.out.println("You cannot sell shares more than the available shares. Please re-try again");
