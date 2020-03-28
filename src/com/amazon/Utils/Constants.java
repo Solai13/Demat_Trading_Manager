@@ -1,7 +1,5 @@
 package com.amazon.Utils;
 
-import java.text.DecimalFormat;
-
 public class Constants {
         public static String USER_DB = "users.db";
         public static String STOCKS_DB = "stocks.db";
