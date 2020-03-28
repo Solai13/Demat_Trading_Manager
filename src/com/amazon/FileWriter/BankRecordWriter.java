@@ -103,7 +103,7 @@ public class BankRecordWriter {
 	public static void writeTransactionNumber(int uniqueID)
     {
         try (
-            ObjectOutputStream objectOutput = new ObjectOutputStream(new FileOutputStream("transactionNumber.db")))
+            ObjectOutputStream objectOutput = new ObjectOutputStream(new FileOutputStream(new File(Constants.TRANSACTION_NUMBER_DB))))
         {
                 objectOutput.writeObject(uniqueID);
         }
@@ -114,7 +114,7 @@ public class BankRecordWriter {
 
     public static int readTransactionNumber () throws ClassNotFoundException, IOException
     {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("transactionNumber.db"));
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(Constants.TRANSACTION_NUMBER_DB)));
             int uniqueID = (int) objectInputStream.readObject();
             objectInputStream.close();
             return uniqueID;

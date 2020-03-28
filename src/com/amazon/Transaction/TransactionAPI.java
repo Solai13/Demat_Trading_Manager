@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -14,34 +13,11 @@ import com.amazon.FileWriter.BankRecordWriter;
 import com.amazon.Stock.Stock;
 import com.amazon.Stock.StockHandler;
 import com.amazon.User.User;
+import com.amazon.Utils.Constants;
 
 public class TransactionAPI {
 	
-//	StockHandler stocksDb = new StockHandler();
-//	StockHandler BSE;
-//	User user;
 	static int transactionID = 0;
-	
-//	TransactionAPI(){
-//		Stock s1 = new Stock("Amazon",100,500);
-//        Stock s2 = new Stock("Flipkart",90,500);
-//        Stock s3 = new Stock("Walmart",80,500);
-//        Stock s4 = new Stock("Jabong",70,500);
-//        Stock s5 = new Stock("Myntra",60,500);
-//        Stock s6 = new Stock("koovs",50,500);
-//        Stock s7 = new Stock("nike",40,500);
-//        
-//        LinkedList<Stock> stockDBList = new LinkedList<Stock>();
-//        stockDBList.add(s1);
-//        stockDBList.add(s2);
-//        stockDBList.add(s3);
-//        stockDBList.add(s4);
-//        stockDBList.add(s5);
-//        stockDBList.add(s6);
-//        stockDBList.add(s7);
-        
-//        BSE = new StockHandler(stockDBList);
-//	}
 	
 	public static void depositMoney(User user, double amount) {
 		double currentBalance = user.getMoney();
@@ -67,16 +43,15 @@ public class TransactionAPI {
 	
 	
 	static double transactionCharge(double transactionAmount,String transactionType) {
-        final double tax = 0.005;
-        final double securityTax = 0.001;
+        
         double finalAmount=0.0;
         
-        double taxFinal = tax*transactionAmount;
+        double taxFinal = Constants.TRANSACTION_CHARGE * transactionAmount;
         
         if(taxFinal<100)
                taxFinal=100;
         
-        double stt = securityTax*transactionAmount;
+        double stt = Constants.SECURITY_TRANSFER_TAX * transactionAmount;
         
         if(transactionType.equals("buy"))
              finalAmount = transactionAmount+stt+taxFinal; 
@@ -93,22 +68,19 @@ public class TransactionAPI {
 	  Stock bseStock =  null;
 	  int sharesToBuy;
       double amountToBeDebited;
-//      Scanner in = new Scanner(System.in);
       
       System.out.println("Enter the name of the company:");
       String shareName = in.next();
       if(BSE.checkShare(shareName))
     	  bseStock = BSE.fetchStocks(shareName);
       else
-    	  return false;
-//        mainMenu(); //it will go to main menu option to reselect buy option    	  
+    	  return false; //it will go to main menu option to reselect buy option    	  
       System.out.println("Enter the number of shares you'd like to buy:");
       sharesToBuy = in.nextInt();
       
       if(sharesToBuy > bseStock.numberOfShares) {
              System.out.println("You cannot buy shares more than the available shares. Please re-try again");
-             return false;
-//             mainMenu(); //it will go to main menu option to reselect buy option
+             return false; //it will go to main menu option to reselect buy option
       }
       else {
              amountToBeDebited = bseStock.getSharePrice()*sharesToBuy;
@@ -155,7 +127,6 @@ public class TransactionAPI {
 	  Stock bseStock =  null, userStock = null;  
 	  int sharesToSell;
       double amountToBeCredited;
-//      Scanner in = new Scanner(System.in);
       
       System.out.println("Enter the name of the company:");
       String shareName = in.next();
@@ -203,7 +174,8 @@ public class TransactionAPI {
 		System.out.println("^^^^^^^^^^^^^^^^^^^ TRANSACTIONS MENU ^^^^^^^^^^^^^^^^^^^");
 		System.out.println("Enter 1 to view all transactions");
 		System.out.println("Enter 2 to view transactions by date range");
-		System.out.println("Enter 3 to view transactions for a stock");        
+		System.out.println("Enter 3 to view transactions for a stock");   
+		System.out.println("Enter 4 to go back to Main Menu");   
     
 		char caseno = scan.next().charAt(0);
     
@@ -216,6 +188,8 @@ public class TransactionAPI {
 			break;
 		case '3':
 			viewTransactionReportForShare(user, scan);
+			break;
+		case '4':
 			break;
 		default:
 			System.out.println("Invalid Option");
@@ -293,44 +267,5 @@ public class TransactionAPI {
 			System.out.println(t);
 		}
  }
-
-	public static void main(String[] args)throws Exception {
-		
-		LinkedList<Transaction> transactionReport = new LinkedList<Transaction>();
-		
-		
-		
-		Transaction t1 = new Transaction(101, "Buy", LocalDate.of(2019, 12, 12), LocalTime.of(03, 35), "Amazon", 1500.00, 3, 4500.00);
-		Transaction t2 = new Transaction(102, "Buy", LocalDate.of(2019, 12, 20), LocalTime.of(04, 20), "Walmart", 1200.00, 2, 2400.00);
-		Transaction t3 = new Transaction(103, "Sell", LocalDate.of(2020, 01, 15), LocalTime.of(9, 40), "Amazon", 1500.00, 1, 1500.00);
-		Transaction t4 = new Transaction(104, "Buy", LocalDate.of(2020, 02, 12), LocalTime.of(02, 15), "Target", 1000.00, 5, 5000.00);
-		transactionReport.add(t1);
-		transactionReport.add(t2);
-		transactionReport.add(t3);
-		transactionReport.add(t4);
-
-//		TransactionAPI.viewTransactionReportForDate(transactionReport);
-//		TransactionAPI.viewTransactionReportForShare(transactionReport);
-//		TransactionAPI.viewAllTransactions(transactionReport);
-		
-//        Stock s1 = new Stock("Amazon",100,500);
-//        Stock s2 = new Stock("Flipkart",90,500);
-//        Stock s3 = new Stock("Walmart",80,500);
-//        Stock s4 = new Stock("Jabong",70,500);
-//        Stock s5 = new Stock("Myntra",60,500);
-//        Stock s6 = new Stock("koovs",50,500);
-//        Stock s7 = new Stock("nike",40,500);
-//        
-//        LinkedList<Stock> stockDBList = new LinkedList<Stock>();
-//        stockDBList.add(s1);
-//        stockDBList.add(s2);
-//        stockDBList.add(s3);
-//        stockDBList.add(s4);
-//        stockDBList.add(s5);
-//        stockDBList.add(s6);
-//        stockDBList.add(s7);
-//        
-//        StockHandler BSE = new StockHandler(stockDBList);
-	}
 
 }

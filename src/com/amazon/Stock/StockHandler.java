@@ -23,13 +23,10 @@ public class StockHandler extends Stock implements Serializable{
            for (Stock stocks : this.stockList) {
                Random r = new Random();
                double randomNumber = r.ints(1, -10, 10).findFirst().getAsInt();
-//               System.out.println(randomNumber);
                double updatedPrice = stocks.sharePrice + stocks.sharePrice * (randomNumber / 100);
-//               System.out.println(stocks.sharePrice);
                if (updatedPrice > 0.0)
                {
                    stocks.sharePrice = updatedPrice;
-//                   System.out.println(stocks.sharePrice);
                }
            }
        }

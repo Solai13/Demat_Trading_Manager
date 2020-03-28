@@ -33,7 +33,7 @@ public class Stock implements Serializable{
 	public String toString() {
 		
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("...............................................");
+		buffer.append("\n...............................................");
 		buffer.append("\n Share Name: "+shareName);
 		buffer.append("\n Price of Share per unit: \u20b9"+sharePrice);
 		buffer.append("\n Number of shares available: "+numberOfShares);

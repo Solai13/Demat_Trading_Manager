@@ -10,22 +10,9 @@ import java.util.Random;
 public class UserHandler implements Serializable{
 	
 	public HashMap<Integer, User> usersMap;
-//	public Double money;
-//	public String userName, passWord;
-//	public Integer accountNumber;
-//	public User currentUser;
-	
-//	public UserHandler(HashMap<Integer, User> usersMap) {
-//		this.usersMap = usersMap;
-//	}
 	
 	public UserHandler(HashMap<Integer, User> usersMap) {
 		this.usersMap = usersMap;
-//		money = null;
-//		userName = null;
-//		passWord = null;
-//		accountNumber = null;
-//		currentUser = null;
 	}
 
 	public User addUser(Scanner scan) {
@@ -114,34 +101,6 @@ public class UserHandler implements Serializable{
             	return null;
             }
 //        }
-	}
-
-	public static void main(String[] args) {
-		
-		
-//		System.out.print("************* Welcome ************");
-//		Scanner in = new Scanner(System.in);
-//		UserH userH = new UserH();
-//		HashMap<Integer, User> usersMap = new HashMap<Integer, User>(); 
-//		UserHandler userH = new UserHandler(usersMap);
-//		User currentUser;
-//		while(true) {
-//		System.out.print("\n>> 1. Create Account");
-//		System.out.print("\n>> 2. Login");
-//		System.out.print("\n>> Enter your choice: ");
-//		int choice = in.nextInt();
-//		switch(choice) {
-//		case 1:
-//			currentUser = userH.addUser(in);
-//			break;
-//		case 2:
-//			currentUser = userH.authenticateUser(in);
-//			break;
-//		default:
-//			System.out.println(">> Invalid choice.");
-//		}
-//		}
-//		in.close();
 	}
 
 }

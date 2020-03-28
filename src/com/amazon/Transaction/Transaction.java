@@ -33,7 +33,7 @@ public class Transaction implements Serializable{
 	public String toString() {
 		
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("---------------------------------------------");
+		buffer.append("\n---------------------------------------------");
 		buffer.append("\n Transaction ID: "+transactionID);
 		buffer.append("\n Transaction Date: "+transactionDate);
 		buffer.append("\n Transaction Time: "+transactionTime);

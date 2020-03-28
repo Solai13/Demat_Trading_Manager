@@ -14,9 +14,7 @@ public class User implements Serializable{
 	public String passWord;
 	private Double money;
 	public Integer accountNumber;
-//	public int shares;
 	public LinkedList<Transaction> transactionReport;
-//	public LinkedList<Stock> userStockList;
 	public StockHandler userHandler;
 	
     public User(String userName, String passWord, double money, Integer accountNumber) {
