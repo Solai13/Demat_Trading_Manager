@@ -59,7 +59,7 @@ public class TransactionAPI {
        else if (transactionType.equals("sell"))
           finalAmount=transactionAmount-stt-taxFinal;
 
-        return finalAmount;
+        return Math.round(finalAmount * 100.0) / 100.0;
 	}
 
   
@@ -100,8 +100,7 @@ public class TransactionAPI {
 	            		 }
                          try {
                         	 transactionID = (int) BankRecordWriter.readTransactionNumber();
-                        	 System.out.println(" Transaction Number: "+transactionID);
-                        	 transactionID = transactionID + 1;
+                        	 transactionID += 1;
 			               } catch (ClassNotFoundException e) {
 	                             System.out.println("error1");
 	                             e.printStackTrace();

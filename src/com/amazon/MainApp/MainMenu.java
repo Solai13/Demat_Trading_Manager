@@ -100,13 +100,13 @@ public class MainMenu {
 	        		double depMoney = 0;
 		        	System.out.println("Enter the Money to be stored in the account: ");
 	            	String mon = scan.next();
-	            	int moneyvalue = 0;
+	            	double moneyvalue = 0;
 	                try {
-	                	moneyvalue = Integer.parseInt(mon);
+	                	moneyvalue = Double.parseDouble(mon);
 	                	depMoney = moneyvalue;
 	                	if(depMoney > 0){
 			            	TransactionAPI.depositMoney(userdetail, depMoney);
-			                System.out.println("Money Deposited succesfully. Updated Balance is Rs."+userdetail.getMoney());
+			                System.out.println("Money Deposited succesfully. Updated Balance is Rs."+Math.round(userdetail.getMoney() * 100.0) / 100.0);
 			                try {
 			 	       			BankRecordWriter.writeUserDB(userH.usersMap);	
 			 	       		} catch(IOException e) {
@@ -130,13 +130,13 @@ public class MainMenu {
 	        		double withdrawMoney = 0;
 	        		System.out.println("Enter the Money you would like to withdraw");
 	            	String mon = scan.next();
-	            	int moneyvalue = 0;
+	            	double moneyvalue = 0;
 	                try {
-	                	moneyvalue = Integer.parseInt(mon);
+	                	moneyvalue = Double.parseDouble(mon);
 	                	withdrawMoney = moneyvalue;
 	                	if(withdrawMoney > 0){
 			            	TransactionAPI.withdrawMoney(userdetail, withdrawMoney);
-			                System.out.println("Money Withdrawal succesful. Updated Balance is Rs."+userdetail.getMoney());
+			                System.out.println("Money Withdrawal succesful. Updated Balance is Rs."+Math.round(userdetail.getMoney() * 100.0) / 100.0);
 			                try {
 			 	       			BankRecordWriter.writeUserDB(userH.usersMap);	
 			 	       		} catch(IOException e) {

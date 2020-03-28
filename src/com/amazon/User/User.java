@@ -41,7 +41,7 @@ public class User implements Serializable{
 		buffer.append("------------- DMAT Account details -------------");
 		buffer.append("\n User Name: "+userName);
 		buffer.append("\n Account Number: "+accountNumber);
-		buffer.append("\n Money in the account: Rs."+money);
+		buffer.append("\n Money in the account: Rs."+Math.round(money * 100.0) / 100.0);
 		if(!userHandler.stockList.isEmpty()) {
 			buffer.append("\n *********** List of shares in posessions ***********\n");
 			for(Stock stock : userHandler.stockList) {

@@ -18,7 +18,6 @@ public class Transaction implements Serializable{
 
 	public Transaction(int transactionID, String transactionType, LocalDate transactionDate, LocalTime transactionTime,
 			String shareName, double sharePricePerUnit, int numberOfShares, double transactionAmount) {
-		super();
 		this.transactionID = transactionID;
 		this.transactionType = transactionType;
 		this.transactionDate = transactionDate;
@@ -39,9 +38,9 @@ public class Transaction implements Serializable{
 		buffer.append("\n Transaction Time: "+transactionTime);
 		buffer.append("\n Transaction Type: "+transactionType);
 		buffer.append("\n Share Name: "+shareName);
-		buffer.append("\n Price of Share per unit: "+sharePricePerUnit);
+		buffer.append("\n Price of Share per unit: Rs."+Math.round(sharePricePerUnit * 100.0) / 100.0);
 		buffer.append("\n Number of shares transacted: "+numberOfShares);
-		buffer.append("\n Transaction Amount: \u20b9"+transactionAmount);
+		buffer.append("\n Transaction Amount: Rs."+Math.round(transactionAmount * 100.0) / 100.0);
 		buffer.append("\n---------------------------------------------");
 		return buffer.toString();
 	}

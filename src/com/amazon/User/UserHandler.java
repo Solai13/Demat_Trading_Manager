@@ -29,10 +29,10 @@ public class UserHandler implements Serializable{
         while(true) {
             System.out.print(">> Enter the Money to be stored in the account: ");
             String mon = scan.next();
-            int monval = 0;
+            double moneyvalue = 0;
             try {
-            	monval = Integer.parseInt(mon);
-            	money = (double) monval;
+            	moneyvalue = Double.parseDouble(mon);
+            	money = moneyvalue;
             	if(money > 0)
             		break;
             	else {
@@ -88,7 +88,7 @@ public class UserHandler implements Serializable{
 	        if(usersMap.containsKey(accountNumber)) {
 	        	currentUser = usersMap.get(accountNumber);
 	            if(currentUser.passWord.equals(passWord)) {
-	            	System.out.println(">> Authentication successfull !");
+	            	System.out.println(">> Authentication successful !");
 	            	System.out.println(currentUser);
 	            	return currentUser;
 	            }

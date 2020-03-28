@@ -37,7 +37,7 @@ public class StockHandler extends Stock implements Serializable{
                     if(stocks.shareName.equalsIgnoreCase(shareName)) {
                           if(TransactionType=="Remove") {
                                  if(quantity<=0) {
-                                        System.out.println("**Please Enter Quantity as more than 1**\n");
+                                        System.out.println("**Please Enter Quantity as more than 0**\n");
                                  }
                                  else if(stocks.numberOfShares>=quantity) {
                                        stocks.numberOfShares -= quantity;
