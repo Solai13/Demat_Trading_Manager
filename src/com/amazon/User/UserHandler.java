@@ -3,6 +3,7 @@ package com.amazon.User;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Scanner;
+
 import java.util.Random;
 
 @SuppressWarnings("serial")
@@ -38,12 +39,23 @@ public class UserHandler implements Serializable{
         userName = scan.next();
         System.out.print(">> Enter a password: ");
         passWord = scan.next();
-        System.out.print(">> Enter the Money to be stored in the account: ");
-        while(money == null) {
-        	if (scan.hasNextDouble())
-        		money = scan.nextDouble();
-        	else
-        		System.out.print(">> Invalid value has been given");
+        while(true) {
+            System.out.print(">> Enter the Money to be stored in the account: ");
+            String mon = scan.next();
+            int monval = 0;
+            try {
+            	monval = Integer.parseInt(mon);
+            	money = (double) monval;
+            	if(money > 0)
+            		break;
+            	else {
+            		System.out.println("\n>> Invalid Amount !");
+            		continue;
+            	}
+            }
+            catch (NumberFormatException ne) {
+        		System.out.println("\n>> Invalid Amount !");
+            }
         }
         accountNumber = new Integer(new Random().nextInt(9999 + 1)  + 1000);
         if(!(usersMap.isEmpty())) {
@@ -70,14 +82,19 @@ public class UserHandler implements Serializable{
 //			System.out.println("\n>> No user has been created yet. Please create a new User !");
 //            return null;
 //        }else {
-	        
-        	System.out.print("\n>> Enter your Account Number: ");
-	        while(accountNumber == null) {
-	        	if (scan.hasNextInt())
-	        		accountNumber = scan.nextInt();
-	        	else
-	        		System.out.print(">> Invalid value has been given. Please try again !");
-	        }
+        	while(true) {
+                System.out.print("\n>> Enter your Account Number: ");
+                String ac = scan.next();
+                int inval = 0;
+                try {
+                  inval = Integer.parseInt(ac);
+                  accountNumber = inval;
+                  break;
+                }
+                catch (NumberFormatException ne) {
+                                 System.out.print("\n>> Invalid account number !");
+                }
+            }
 	        System.out.print(">> Enter your password: ");
             passWord = scan.next();
 	        

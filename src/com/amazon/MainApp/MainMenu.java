@@ -4,10 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Random;
 
 import com.amazon.FileWriter.BankRecordWriter;
-import com.amazon.Stock.Stock;
 import com.amazon.Stock.StockHandler;
 import com.amazon.Transaction.TransactionAPI;
 import com.amazon.User.User;
@@ -142,10 +140,8 @@ public class MainMenu {
 	        System.out.println("3 - Withdraw Money");
 	        System.out.println("4 - Buy transaction");
 	        System.out.println("5 - Sell transaction");
-	        System.out.println("6 - View All transactions");
-	        System.out.println("7 - View transaction by date");
-	        System.out.println("8 - View transaction by Stocks");
-	        System.out.println("9 - LogOut");
+	        System.out.println("6 - View Transactions report");
+	        System.out.println("7 - LogOut");
 	
 	        char maincaseno = scan.next().charAt(0);
 	        
@@ -166,46 +162,66 @@ public class MainMenu {
 	            System.out.println(userdetail);
 	            loginMenu(userdetail);
 	            break;
-	        case '2':
-	        	System.out.println("Enter the Money to be stored in the account: ");
-        		double depMoney = 0;
-	            if (scan.hasNextDouble()) {
-	            	depMoney = scan.nextDouble();
-	            	TransactionAPI.depositMoney(userdetail, depMoney);
-	                System.out.println("Money Deposited succesfully. Updated Balance is - "+userdetail.getMoney());
+	        case '2':	
+	        	while(true) {
+	        		double depMoney = 0;
+		        	System.out.println("Enter the Money to be stored in the account: ");
+	            	String mon = scan.next();
+	            	int moneyvalue = 0;
 	                try {
-	 	       			BankRecordWriter.writeUserDB(userH.usersMap);
-	 	       		} catch(IOException e) {
-	 	       			System.out.println("User Database not found !");
-	 	       			System.exit(0);
-	 	       		}
+	                	moneyvalue = Integer.parseInt(mon);
+	                	depMoney = moneyvalue;
+	                	if(depMoney > 0){
+			            	TransactionAPI.depositMoney(userdetail, depMoney);
+			                System.out.println("Money Deposited succesfully. Updated Balance is Rs."+userdetail.getMoney());
+			                try {
+			 	       			BankRecordWriter.writeUserDB(userH.usersMap);	
+			 	       		} catch(IOException e) {
+			 	       			System.out.println("User Database not found !");
+			 	       			System.exit(0);
+			 	       		}
+			                break;
+	                	} else {
+	                		System.out.println("\n>> Invalid Amount !");
+	                		continue;
+	                	}
+	                }
+	                catch (NumberFormatException ne) {
+		                   System.out.println("Invalid value has been given. Please enter a valid amount !");
+	                }
 	            }
-	            else {
-	                   System.out.println("Invalid value has been given. Please enter a valid amount: ");
-	            }
-               loginMenu(userdetail);
-               break;
+	        	loginMenu(userdetail);
+	        	break;
 	        case '3':
-		        	System.out.println("Enter the Money you would like to withdraw");
-		    		double withdrawMoney = 0;
-		            if (scan.hasNextDouble()) {
-		            	withdrawMoney = scan.nextDouble();
-		            }
-		            else {
-		                   System.out.println("Invalid value has been given");
-		                   loginMenu(userdetail);
-		           }
-		           if(TransactionAPI.withdrawMoney(userdetail, withdrawMoney)) {
-		        	   System.out.println("Money Withdrawal succesfull. Updated Balance is - "+userdetail.getMoney());
-		           }
-		           try {
-		       			BankRecordWriter.writeUserDB(userH.usersMap);
-		       		} catch(IOException e) {
-		       			System.out.println("User Database not found !");
-		       			System.exit(0);
-		       		}
-		           loginMenu(userdetail);
-	               break;
+	        	while(true) {
+	        		double withdrawMoney = 0;
+	        		System.out.println("Enter the Money you would like to withdraw");
+	            	String mon = scan.next();
+	            	int moneyvalue = 0;
+	                try {
+	                	moneyvalue = Integer.parseInt(mon);
+	                	withdrawMoney = moneyvalue;
+	                	if(withdrawMoney > 0){
+			            	TransactionAPI.withdrawMoney(userdetail, withdrawMoney);
+			                System.out.println("Money Withdrawal succesful. Updated Balance is Rs."+userdetail.getMoney());
+			                try {
+			 	       			BankRecordWriter.writeUserDB(userH.usersMap);	
+			 	       		} catch(IOException e) {
+			 	       			System.out.println("User Database not found !");
+			 	       			System.exit(0);
+			 	       		}
+		                	break;
+	                	} else {
+	                		System.out.println("\n>> Invalid Amount !");
+	                		continue;
+	                	}
+	                }
+	                catch (NumberFormatException ne) {
+		                   System.out.println("Invalid value has been given. Please enter a valid amount ! ");
+	                }
+	            }
+		        loginMenu(userdetail);
+	            break;
 	        case '4':
 	               System.out.println("--** Stock List **--\n");
 	               BSE.listShares();
@@ -244,18 +260,10 @@ public class MainMenu {
 	               loginMenu(userdetail);
 	               break;
 	        case '6':
-	               TransactionAPI.viewAllTransactions(userdetail);
-	               loginMenu(userdetail);
+	        		TransactionAPI.viewTransactionReport(userdetail, scan);
+	        		loginMenu(userdetail);
 	               break;
 	        case '7':
-	            TransactionAPI.viewTransactionReportForDate(userdetail, scan);
-	            loginMenu(userdetail);
-	            break;
-	        case '8':
-	            TransactionAPI.viewTransactionReportForShare(userdetail, scan);
-	            loginMenu(userdetail);
-	            break;
-	        case '9':
 	        	try {
    	       			BankRecordWriter.writeUserDB(userH.usersMap);
    	       			BankRecordWriter.writeStockInformation(BSE);

@@ -22,21 +22,29 @@ public class StockHandler extends Stock implements Serializable{
        public void loadCurrentSharePrices() {
            for (Stock stocks : this.stockList) {
                Random r = new Random();
-               int randomNumber = r.ints(1, -10, 10).findFirst().getAsInt();
-               System.out.println(randomNumber);
-               stocks.sharePrice += stocks.sharePrice + stocks.sharePrice * (randomNumber / 100);
+               double randomNumber = r.ints(1, -10, 10).findFirst().getAsInt();
+//               System.out.println(randomNumber);
+               double updatedPrice = stocks.sharePrice + stocks.sharePrice * (randomNumber / 100);
+//               System.out.println(stocks.sharePrice);
+               if (updatedPrice > 0.0)
+               {
+                   stocks.sharePrice = updatedPrice;
+//                   System.out.println(stocks.sharePrice);
+               }
            }
        }
-       public boolean updateSharesInMarket(String shareName, String TransactionType, int quantity){
+       
+       public boolean updateSharesInMarket(String shareName, String TransactionType, int quantity, double sharePrice){
              
              for(Stock stocks : stockList) {
-                    if(stocks.shareName.equals(shareName)) {
+                    if(stocks.shareName.equalsIgnoreCase(shareName)) {
                           if(TransactionType=="Remove") {
                                  if(quantity<=0) {
                                         System.out.println("**Please Enter Quantity as more than 1**\n");
                                  }
                                  else if(stocks.numberOfShares>=quantity) {
                                        stocks.numberOfShares -= quantity;
+                                       stocks.sharePrice = sharePrice;
                                        return true;
                                  }
                                  else {
@@ -46,6 +54,7 @@ public class StockHandler extends Stock implements Serializable{
                           }
                           if(TransactionType=="Add") {
                                        stocks.numberOfShares += quantity;
+                                       stocks.sharePrice = sharePrice;
                                        return true;
                           }
                     }
@@ -64,13 +73,13 @@ public class StockHandler extends Stock implements Serializable{
        }
        
        public Stock fetchStocks(String Name) {
-             List<Stock> filteredProducts = stockList.stream().filter(p-> p.shareName.equals(Name)).collect(Collectors.toList());
+             List<Stock> filteredProducts = stockList.stream().filter(p-> p.shareName.equalsIgnoreCase(Name)).collect(Collectors.toList());
              System.out.println(filteredProducts);
              return filteredProducts.get(0);
        }
        
        public boolean checkShare(String Name) {
-             List<Stock> filteredProducts = stockList.stream().filter(p-> p.shareName.equals(Name)).collect(Collectors.toList());
+             List<Stock> filteredProducts = stockList.stream().filter(p-> p.shareName.equalsIgnoreCase(Name)).collect(Collectors.toList());
              if(filteredProducts.size()==1) {
                     System.out.println("Stock Available");
                     return true;

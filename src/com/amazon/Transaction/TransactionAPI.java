@@ -1,5 +1,6 @@
 package com.amazon.Transaction;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import com.amazon.FileWriter.BankRecordWriter;
 import com.amazon.Stock.Stock;
 import com.amazon.Stock.StockHandler;
 import com.amazon.User.User;
@@ -18,7 +20,7 @@ public class TransactionAPI {
 //	StockHandler stocksDb = new StockHandler();
 //	StockHandler BSE;
 //	User user;
-	static int transactionID = 1000;
+	static int transactionID = 0;
 	
 //	TransactionAPI(){
 //		Stock s1 = new Stock("Amazon",100,500);
@@ -64,18 +66,27 @@ public class TransactionAPI {
 	}
 	
 	
-	static double transactionCharge(double amountToBeDebited) {
-    
-		final double transactionChargePercent = 0.005;
-		final double securityTransferTaxPercent = 0.001;
-        double transactionChargeAmount = transactionChargePercent*amountToBeDebited;
+	static double transactionCharge(double transactionAmount,String transactionType) {
+        final double tax = 0.005;
+        final double securityTax = 0.001;
+        double finalAmount=0.0;
         
-        if(transactionChargeAmount<100)
-        	transactionChargeAmount=100;
+        double taxFinal = tax*transactionAmount;
         
-        return (amountToBeDebited + transactionChargeAmount + (securityTransferTaxPercent*amountToBeDebited));
+        if(taxFinal<100)
+               taxFinal=100;
         
+        double stt = securityTax*transactionAmount;
+        
+        if(transactionType.equals("buy"))
+             finalAmount = transactionAmount+stt+taxFinal; 
+
+       else if (transactionType.equals("sell"))
+          finalAmount=transactionAmount-stt-taxFinal;
+
+        return finalAmount;
 	}
+
   
   public static boolean buyShares(User user, StockHandler BSE, Scanner in) {
 	
@@ -101,21 +112,34 @@ public class TransactionAPI {
       }
       else {
              amountToBeDebited = bseStock.getSharePrice()*sharesToBuy;
-             double finalAmount=transactionCharge(amountToBeDebited);
-             System.out.println("Total amount to pay for buying "+sharesToBuy+" shares is \u20b9"+finalAmount);
+             double finalAmount=transactionCharge(amountToBeDebited, "buy");
+             System.out.println("Total amount to pay for buying "+sharesToBuy+" shares is Rs."+finalAmount);
              
              if(user.getMoney() > finalAmount) {
-            	 if(BSE.updateSharesInMarket(shareName, "Remove", sharesToBuy)) {
+            	 if(BSE.updateSharesInMarket(shareName, "Remove", sharesToBuy, bseStock.getSharePrice())) {
 	            		 withdrawMoney(user, finalAmount);
 	        		 	 if(user.userHandler.checkShare(shareName)) {
-	            			 if(user.userHandler.updateSharesInMarket(shareName, "Add", sharesToBuy))
+	            			 if(user.userHandler.updateSharesInMarket(shareName, "Add", sharesToBuy, bseStock.getSharePrice()))
 	            				 System.out.println("Shares updated to your account");
 	            		 }
 	            		 else {
 	            		 	user.userHandler.stockList.add(new Stock(shareName,bseStock.getSharePrice(),sharesToBuy));
 	             		 	System.out.println("Shares added to your account");
 	            		 }
-	        		 	user.transactionReport.add(new Transaction(++transactionID, "Buy", LocalDate.now(), LocalTime.now(), shareName, bseStock.getSharePrice(), sharesToBuy, finalAmount));
+                         try {
+                        	 transactionID = (int) BankRecordWriter.readTransactionNumber();
+                        	 System.out.println(" Transaction Number: "+transactionID);
+                        	 transactionID = transactionID + 1;
+			               } catch (ClassNotFoundException e) {
+	                             System.out.println("error1");
+	                             e.printStackTrace();
+			               } catch (IOException e) {
+				            	   transactionID = 1000;
+				                   BankRecordWriter.writeTransactionNumber(transactionID);
+			               }
+
+	        		 	user.transactionReport.add(new Transaction(transactionID, "Buy", LocalDate.now(), LocalTime.now(), shareName, bseStock.getSharePrice(), sharesToBuy, finalAmount));
+	        		 	BankRecordWriter.writeTransactionNumber(transactionID);
 	        		 	return true;
             	 }
             	 else
@@ -151,17 +175,54 @@ public class TransactionAPI {
       else {
     	  	 bseStock = BSE.fetchStocks(shareName);
              amountToBeCredited = userStock.getSharePrice()*sharesToSell;
-             double finalAmount=transactionCharge(amountToBeCredited);
-             System.out.println("Total amount to be credited for selling "+sharesToSell+" shares is \\u20b9"+finalAmount);
-             if(BSE.updateSharesInMarket(shareName, "Add", sharesToSell) && user.userHandler.updateSharesInMarket(shareName, "Remove", sharesToSell)) {
+             double finalAmount=transactionCharge(amountToBeCredited, "sell");
+             System.out.println("Total amount to be credited for selling "+sharesToSell+" shares is Rs."+finalAmount);
+             if(BSE.updateSharesInMarket(shareName, "Add", sharesToSell, bseStock.getSharePrice()) && user.userHandler.updateSharesInMarket(shareName, "Remove", sharesToSell, bseStock.getSharePrice())) {
             	 depositMoney(user, finalAmount); //calls deposit function to deposit the money to user's wallet
             	 System.out.println("Shares sold successful");
-            	 user.transactionReport.add(new Transaction(++transactionID, "Sell", LocalDate.now(), LocalTime.now(), shareName, bseStock.getSharePrice(), sharesToSell, finalAmount));
+            	 try {
+                	 transactionID = (int) BankRecordWriter.readTransactionNumber();
+                	 transactionID += 1;
+	               } catch (ClassNotFoundException e) {
+                         System.out.println("error1");
+                         e.printStackTrace();
+	               } catch (IOException e) {
+		            	   transactionID = 1000;
+		                   BankRecordWriter.writeTransactionNumber(transactionID);
+	               }
+            	 BankRecordWriter.writeTransactionNumber(transactionID);
+            	 user.transactionReport.add(new Transaction(transactionID, "Sell", LocalDate.now(), LocalTime.now(), shareName, bseStock.getSharePrice(), sharesToSell, finalAmount));
              }
              return true;
       }       
       
   }
+  
+  public static void viewTransactionReport(User user, Scanner scan) {
+	    
+		System.out.println("^^^^^^^^^^^^^^^^^^^ TRANSACTIONS MENU ^^^^^^^^^^^^^^^^^^^");
+		System.out.println("Enter 1 to view all transactions");
+		System.out.println("Enter 2 to view transactions by date range");
+		System.out.println("Enter 3 to view transactions for a stock");        
+    
+		char caseno = scan.next().charAt(0);
+    
+		switch (caseno) {
+		case '1':
+			viewAllTransactions(user);
+			break;
+		case '2':
+			viewTransactionReportForDate(user, scan);
+			break;
+		case '3':
+			viewTransactionReportForShare(user, scan);
+			break;
+		default:
+			System.out.println("Invalid Option");
+			viewTransactionReport(user, scan);
+    }
+	        
+	  }
 
   
  public static void viewTransactionReportForDate(User user, Scanner scan){
@@ -210,7 +271,7 @@ public class TransactionAPI {
 	System.out.print(">>Enter the share name: ");
 	String shareName = scan.next();
 	
-	List<Transaction> filteredTransactions = user.transactionReport.stream().filter(t-> t.shareName.equals(shareName)).collect(Collectors.toList());
+	List<Transaction> filteredTransactions = user.transactionReport.stream().filter(t-> t.shareName.equalsIgnoreCase(shareName)).collect(Collectors.toList());
     if(filteredTransactions.size()>=1) {
     	System.out.println("*********************************************");
     	System.out.println("          Transaction Report");

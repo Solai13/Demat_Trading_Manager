@@ -99,5 +99,26 @@ public class BankRecordWriter {
 
       return newBSE;
 	}
+	
+	public static void writeTransactionNumber(int uniqueID)
+    {
+        try (
+            ObjectOutputStream objectOutput = new ObjectOutputStream(new FileOutputStream("transactionNumber.db")))
+        {
+                objectOutput.writeObject(uniqueID);
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static int readTransactionNumber () throws ClassNotFoundException, IOException
+    {
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("transactionNumber.db"));
+            int uniqueID = (int) objectInputStream.readObject();
+            objectInputStream.close();
+            return uniqueID;
+}   
+
 
 }
