@@ -87,9 +87,8 @@ public class TransactionAPI {
              double finalAmount=transactionCharge(amountToBeDebited, "buy");
              System.out.println("Total amount to pay for buying "+sharesToBuy+" shares is Rs."+finalAmount);
              
-             if(user.getMoney() > finalAmount) {
-            	 if(BSE.updateSharesInMarket(shareName, "Remove", sharesToBuy, bseStock.getSharePrice())) {
-	            		 withdrawMoney(user, finalAmount);
+             if(withdrawMoney(user, finalAmount)) {
+            	 BSE.updateSharesInMarket(shareName, "Remove", sharesToBuy, bseStock.getSharePrice());
 	        		 	 if(user.userHandler.checkShare(shareName)) {
 	            			 if(user.userHandler.updateSharesInMarket(shareName, "Add", sharesToBuy, bseStock.getSharePrice()))
 	            				 System.out.println("Shares updated to your account");
@@ -115,9 +114,9 @@ public class TransactionAPI {
             	 }
             	 else
             		 return false; //it will go to main menu option to reselect buy option            	 
-             }
-             System.out.println("Insufficient balance in your Account.");
-             return false;
+//             }
+//             System.out.println("Insufficient balance in your Account.");
+//             return false;
       }
   }
 

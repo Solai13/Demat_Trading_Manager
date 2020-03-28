@@ -24,8 +24,16 @@ public class UserHandler implements Serializable{
 		
         System.out.print("\n>> Enter the New User Name: ");
         userName = scan.next();
-        System.out.print(">> Enter a password: ");
-        passWord = scan.next();
+        while(true) {
+	        System.out.print(">> Enter a password: ");
+	        passWord = scan.next();
+	        if(passWord.length() > 6) {
+		        break;	
+	        }else {
+	        	System.out.println(">> Enter a strong password of minimum 6 characters !");
+	        	continue;
+	        }
+        }
         while(true) {
             System.out.print(">> Enter the Money to be stored in the account: ");
             String mon = scan.next();
@@ -36,12 +44,12 @@ public class UserHandler implements Serializable{
             	if(money > 0)
             		break;
             	else {
-            		System.out.println("\n>> Invalid Amount !");
+            		System.out.println(">> Invalid Amount !");
             		continue;
             	}
             }
             catch (NumberFormatException ne) {
-        		System.out.println("\n>> Invalid Amount !");
+        		System.out.println(">> Invalid Amount !");
             }
         }
         accountNumber = new Integer(new Random().nextInt(9999 + 1)  + 1000);
