@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class Stock implements Serializable{
 	
 	public String shareName;
-	private double sharePrice;
+	protected double sharePrice;
 	public int numberOfShares;
     
     public Stock(){

@@ -12,57 +12,24 @@ import java.util.LinkedList;
 import com.amazon.Stock.Stock;
 import com.amazon.Stock.StockHandler;
 import com.amazon.User.User;
+import com.amazon.Utils.Constants;
 
 
 public class BankRecordWriter {
-	
-//	public User user;
-//	public StockHandler BSE;
-//	public HashMap<Integer, User> usersMap;
-	
-//	public static void writeUserInformation(User user){
-//
-//        try (
-//            ObjectOutputStream objectOutput
-//                = new ObjectOutputStream(new FileOutputStream(user.userName + "_account.db"))
-//            ) {
-// 
-//                objectOutput.writeObject(user);
-//
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//
-//        }
-//    }
-//
-//    public static User readUserInformation(String username)
-//
-//    {
-//        try {
-//
-//            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(username + "_account.db"));
-//            return (User) objectInputStream.readObject();
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return null;
-//
-//    }
 
 
-	public static void writeStockInformation(String path, StockHandler BSE) throws IOException {
+	public static void writeStockInformation(StockHandler BSE) throws IOException {
 		
-	    File file =  new File(path);
+	    File file =  new File(Constants.STOCKS_DB);
 	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
 	    objectOutputStream.writeObject(BSE);
 	    objectOutputStream.close();
 	    
 	}
 	
-	public static StockHandler readStockInformation(String path) throws IOException, ClassNotFoundException {
+	public static StockHandler readStockInformation() throws IOException, ClassNotFoundException {
 	    
-		File fileToRead = new File(path);
+		File fileToRead = new File(Constants.STOCKS_DB);
 	    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileToRead));
 	    StockHandler BSE = (StockHandler) objectInputStream.readObject();
 	    objectInputStream.close();
@@ -70,41 +37,21 @@ public class BankRecordWriter {
 	    
 	}
 	
-	public static void writeUserDB(String path, HashMap<Integer, User> usersMap) throws IOException {
-		
-//		 try (
-//				 ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File(path)))
-//		            ) {
-//		 
-//		            	objectOutputStream.writeObject(usersMap);
-//		        	    objectOutputStream.close();
-//
-//		        } catch (IOException ex) {
-//		            ex.printStackTrace();
-//
-//		        }
-		 
-		File file =  new File(path);
-	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
+	public static void writeUserDB(HashMap<Integer, User> usersMap) throws IOException {
+
+
+		File fileToRead = new File(Constants.USER_DB);
+	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileToRead));
 	    objectOutputStream.writeObject(usersMap);
 	    objectOutputStream.close();
 	    
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static HashMap<Integer, User> readUserDB(String path) throws IOException, ClassNotFoundException {
-		
-//		try {
-//
-//            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(path)));
-//            return (HashMap<Integer, User>) objectInputStream.readObject();
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return null;
+	public static HashMap<Integer, User> readUserDB() throws IOException, ClassNotFoundException {
+
 	    
-		File fileToRead = new File(path);
+		File fileToRead = new File(Constants.USER_DB);
 	    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileToRead));
 	    HashMap<Integer, User> usersMap = (HashMap<Integer, User>) objectInputStream.readObject();
 	    objectInputStream.close();
@@ -112,7 +59,7 @@ public class BankRecordWriter {
 	    
 	}
 	
-	public static void main(String[] args) {
+	public static StockHandler writeDummyStockData() {
 		
       Stock s1 = new Stock("Amazon",100,500);
       Stock s2 = new Stock("Flipkart",90,500);
@@ -133,31 +80,24 @@ public class BankRecordWriter {
       
       StockHandler BSE = new StockHandler(stockDBList);
       StockHandler newBSE = null;
-      
-      BSE.listShares();
-      
+
       try {
-			BankRecordWriter.writeStockInformation("stocks.db", BSE);
-			System.out.println(" Write Successful !");
+			BankRecordWriter.writeStockInformation(BSE);
 		} catch(IOException e) {
-			System.out.println("User Database not found !");
 			System.out.println(e);
 			System.exit(0);
 		}
       
       try {
-    	  newBSE = BankRecordWriter.readStockInformation("stocks.db");
-    	  System.out.println(" Read Successful !");
+    	  newBSE = BankRecordWriter.readStockInformation();
 		} catch(IOException e) {
-			System.out.println("User Database not found !");
 			System.exit(0);
 		}catch(ClassNotFoundException e) {
 			System.out.println("User Class not found !");
 			System.exit(0);
 		}
-      
-      newBSE.listShares();
-      
+
+      return newBSE;
 	}
 
 }

@@ -3,10 +3,11 @@ package com.amazon.Stock;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
-public class StockHandler implements Serializable{
+public class StockHandler extends Stock implements Serializable{
        
        public LinkedList<Stock> stockList;
        
@@ -17,7 +18,15 @@ public class StockHandler implements Serializable{
        public StockHandler(LinkedList<Stock> stockList){
              this.stockList = stockList;
        }
-       
+
+       public void loadCurrentSharePrices() {
+           for (Stock stocks : this.stockList) {
+               Random r = new Random();
+               int randomNumber = r.ints(1, -10, 10).findFirst().getAsInt();
+               System.out.println(randomNumber);
+               stocks.sharePrice += stocks.sharePrice + stocks.sharePrice * (randomNumber / 100);
+           }
+       }
        public boolean updateSharesInMarket(String shareName, String TransactionType, int quantity){
              
              for(Stock stocks : stockList) {
@@ -66,7 +75,7 @@ public class StockHandler implements Serializable{
                     System.out.println("Stock Available");
                     return true;
              }else {
-                    System.out.println("Stock Not Available");
+                    System.out.println("Stock Not Available with you.");
                     return false;
              }     
        }

@@ -4,8 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Random;
 
 import com.amazon.FileWriter.BankRecordWriter;
+import com.amazon.Stock.Stock;
 import com.amazon.Stock.StockHandler;
 import com.amazon.Transaction.TransactionAPI;
 import com.amazon.User.User;
@@ -109,7 +111,7 @@ public class MainMenu {
         case '1':
         	currentUser = userH.addUser(scan);
         	try {
-    			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
+    			BankRecordWriter.writeUserDB(userH.usersMap);
     		} catch(IOException e) {
     			System.out.println("User Database not found !");
     			System.exit(0);
@@ -150,8 +152,8 @@ public class MainMenu {
 	        switch (maincaseno) {
 	        case '0':
 	        	try {
-   	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
-   	       			BankRecordWriter.writeStockInformation("stocks.db", BSE);
+   	       			BankRecordWriter.writeUserDB(userH.usersMap);
+   	       			BankRecordWriter.writeStockInformation(BSE);
    	       		} catch(IOException e) {
    	       			System.out.println("User Database not found !");
    	       			System.exit(0);
@@ -172,7 +174,7 @@ public class MainMenu {
 	            	TransactionAPI.depositMoney(userdetail, depMoney);
 	                System.out.println("Money Deposited succesfully. Updated Balance is - "+userdetail.getMoney());
 	                try {
-	 	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
+	 	       			BankRecordWriter.writeUserDB(userH.usersMap);
 	 	       		} catch(IOException e) {
 	 	       			System.out.println("User Database not found !");
 	 	       			System.exit(0);
@@ -197,7 +199,7 @@ public class MainMenu {
 		        	   System.out.println("Money Withdrawal succesfull. Updated Balance is - "+userdetail.getMoney());
 		           }
 		           try {
-		       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
+		       			BankRecordWriter.writeUserDB(userH.usersMap);
 		       		} catch(IOException e) {
 		       			System.out.println("User Database not found !");
 		       			System.exit(0);
@@ -209,8 +211,8 @@ public class MainMenu {
 	               BSE.listShares();
 	               if(TransactionAPI.buyShares(userdetail,BSE, scan)) {
 	            	   try {
-		   	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);
-		   	       			BankRecordWriter.writeStockInformation("stocks.db", BSE);
+		   	       			BankRecordWriter.writeUserDB(userH.usersMap);
+		   	       			BankRecordWriter.writeStockInformation(BSE);
 		   	       		} catch(IOException e) {
 		   	       			System.out.println("User Database not found !");
 		   	       			System.out.println(e);
@@ -229,8 +231,8 @@ public class MainMenu {
 	               userdetail.userHandler.listShares();
 	               if(TransactionAPI.sellShares(userdetail,BSE, scan)) {
 	            	   try {
-		   	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
-		   	       			BankRecordWriter.writeStockInformation("stocks.db", BSE);
+		   	       			BankRecordWriter.writeUserDB(userH.usersMap);
+		   	       			BankRecordWriter.writeStockInformation(BSE);
 		   	       		} catch(IOException e) {
 		   	       			System.out.println("User Database not found !");
 		   	       			System.exit(0);
@@ -255,8 +257,8 @@ public class MainMenu {
 	            break;
 	        case '9':
 	        	try {
-   	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
-   	       			BankRecordWriter.writeStockInformation("stocks.db", BSE);
+   	       			BankRecordWriter.writeUserDB(userH.usersMap);
+   	       			BankRecordWriter.writeStockInformation(BSE);
    	       		} catch(IOException e) {
    	       			System.out.println("User Database not found !");
    	       			System.exit(0);
@@ -292,10 +294,11 @@ public class MainMenu {
 		System.out.println("^^^^^^^^^^^^^^^^^^^ DMAT TRADING ACCOUNT MANAGER ^^^^^^^^^^^^^^^^^^^");
 //		BankRecordWriter writer = new BankRecordWriter(); 
 		try {
-			usersMap = BankRecordWriter.readUserDB("users.db");	
+			usersMap = BankRecordWriter.readUserDB();
 		} catch(FileNotFoundException e) {
 			usersMap = new HashMap<Integer, User>();
 		}catch(IOException e) {
+			e.printStackTrace();
 			System.out.println("User Database not found !");
 			System.exit(0);
 		}catch(ClassNotFoundException e) {
@@ -304,11 +307,12 @@ public class MainMenu {
 			System.exit(0);
 		}
 		try {
-			BSE = BankRecordWriter.readStockInformation("stocks.db");	
+			BSE = BankRecordWriter.readStockInformation();
+			System.out.println("Loading and updating stock informations and prices !!");
+			BSE.loadCurrentSharePrices();
 		} catch(IOException e) {
-			System.out.println("Stock Database not found !");
-			System.out.println(e);
-			System.exit(0);
+			System.out.println("Loading your stocks !!");
+			BSE = BankRecordWriter.writeDummyStockData();
 		}catch(ClassNotFoundException e) {
 			System.out.println("Stock Class not found !");
 			System.out.println(e);

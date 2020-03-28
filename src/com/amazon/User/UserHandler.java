@@ -54,13 +54,7 @@ public class UserHandler implements Serializable{
 		currentUser = new User(userName, passWord, money, accountNumber);
 		System.out.println(currentUser);
 		usersMap.put(currentUser.accountNumber, currentUser);
-//		try {
-//			com.amazon.FileWriter.BankRecordWriter.writeUserDB("users.db", usersMap);	
-//		} catch(IOException e) {
-//			System.out.println("User Database not found !");
-//			System.exit(0);
-//		}
-		
+
 		System.out.println(">> Account has been created successfully !");
         return currentUser;
 	}
