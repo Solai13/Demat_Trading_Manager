@@ -149,6 +149,13 @@ public class MainMenu {
 	        
 	        switch (maincaseno) {
 	        case '0':
+	        	try {
+   	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
+   	       			BankRecordWriter.writeStockInformation("stocks.db", BSE);
+   	       		} catch(IOException e) {
+   	       			System.out.println("User Database not found !");
+   	       			System.exit(0);
+   	       		}
 	        	scan.close();
 	        	System.exit(0);
 	            break;
@@ -158,23 +165,22 @@ public class MainMenu {
 	            loginMenu(userdetail);
 	            break;
 	        case '2':
-	        	System.out.println("Enter the Money to be stored in the account");
+	        	System.out.println("Enter the Money to be stored in the account: ");
         		double depMoney = 0;
 	            if (scan.hasNextDouble()) {
 	            	depMoney = scan.nextDouble();
+	            	TransactionAPI.depositMoney(userdetail, depMoney);
+	                System.out.println("Money Deposited succesfully. Updated Balance is - "+userdetail.getMoney());
+	                try {
+	 	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
+	 	       		} catch(IOException e) {
+	 	       			System.out.println("User Database not found !");
+	 	       			System.exit(0);
+	 	       		}
 	            }
 	            else {
-	                   System.out.println("Invalid value has been given");
-	                   loginMenu(userdetail);
+	                   System.out.println("Invalid value has been given. Please enter a valid amount: ");
 	            }
-	            TransactionAPI.depositMoney(userdetail, depMoney);
-               System.out.println("Money Deposited succesfully. Updated Balance is - "+userdetail.getMoney());
-               try {
-	       			BankRecordWriter.writeUserDB("users.db", userH.usersMap);	
-	       		} catch(IOException e) {
-	       			System.out.println("User Database not found !");
-	       			System.exit(0);
-	       		}
                loginMenu(userdetail);
                break;
 	        case '3':

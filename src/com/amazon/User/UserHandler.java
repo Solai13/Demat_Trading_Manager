@@ -72,10 +72,10 @@ public class UserHandler implements Serializable{
 		Integer accountNumber=null;
 		User currentUser;
 		
-		if(usersMap.isEmpty()) {
-			System.out.println("\n>> No user has been created yet. Please create a new User !");
-            return null;
-        }else {
+//		if(usersMap.isEmpty()) {
+//			System.out.println("\n>> No user has been created yet. Please create a new User !");
+//            return null;
+//        }else {
 	        
         	System.out.print("\n>> Enter your Account Number: ");
 	        while(accountNumber == null) {
@@ -95,14 +95,14 @@ public class UserHandler implements Serializable{
 	            	return currentUser;
 	            }
 	            else {
-	            	System.out.print(">> Authentication failure. Please try again !");
+	            	System.out.println(">> Authentication failure. Either account number/password is wrong. Please try again !");
 	            	return null;
 	            }
 	        }else {
-            	System.out.print(">> Authentication failure. Please try again !");
+            	System.out.println(">> Account does not exist. Please create an account !");
             	return null;
             }
-        }
+//        }
 	}
 
 	public static void main(String[] args) {

@@ -170,10 +170,11 @@ public class TransactionAPI {
 	 LocalDate tempDate = null, startDate, endDate;
 	 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd");
 	 System.out.print(">> Enter the start date in (yyyy-mm-dd) format: ");
-	 while(tempDate==null) {
-		 date = scan.nextLine();
+	 while(tempDate == null) {
+		 date = scan.next();
 		 try {
 			 tempDate = LocalDate.parse(date, dateFormat);
+			 break;
 		 }catch (DateTimeParseException e) {
 			 System.out.print("\n>> Sorry, that's not a valid date. Please enter date in proper format: ");
 		 }
@@ -182,7 +183,7 @@ public class TransactionAPI {
 	 tempDate = null;
 	 System.out.print(">> Enter the end date in (yyyy-mm-dd) format: ");
 	 while(tempDate==null) {
-		 date = scan.nextLine();
+		 date = scan.next();
 		 try {
 			 tempDate = LocalDate.parse(date, dateFormat);	 
 		 }catch (DateTimeParseException e) {
@@ -207,7 +208,7 @@ public class TransactionAPI {
  public static void viewTransactionReportForShare(User user, Scanner scan){
 	 
 	System.out.print(">>Enter the share name: ");
-	String shareName = scan.nextLine();
+	String shareName = scan.next();
 	
 	List<Transaction> filteredTransactions = user.transactionReport.stream().filter(t-> t.shareName.equals(shareName)).collect(Collectors.toList());
     if(filteredTransactions.size()>=1) {
