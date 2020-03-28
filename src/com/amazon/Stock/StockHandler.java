@@ -1,10 +1,13 @@
 package com.amazon.Stock;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import com.amazon.User.User;
 
 @SuppressWarnings("serial")
 public class StockHandler extends Stock implements Serializable{
@@ -19,7 +22,7 @@ public class StockHandler extends Stock implements Serializable{
              this.stockList = stockList;
        }
 
-       public void loadCurrentSharePrices() {
+       public void loadCurrentSharePrices(HashMap<Integer, User> usersMap) {
            for (Stock stocks : this.stockList) {
                Random r = new Random();
                double randomNumber = r.ints(1, -10, 10).findFirst().getAsInt();

@@ -41,7 +41,7 @@ public class UserHandler implements Serializable{
             try {
             	moneyvalue = Double.parseDouble(mon);
             	money = moneyvalue;
-            	if(money > 0)
+            	if(money > 0 && money < 999999999)
             		break;
             	else {
             		System.out.println(">> Invalid Amount !");

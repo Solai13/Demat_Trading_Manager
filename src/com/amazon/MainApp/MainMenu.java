@@ -97,15 +97,15 @@ public class MainMenu {
 	            break;
 	        case '2':	
 	        	while(true) {
-	        		double depMoney = 0;
+	        		double depositMoney = 0;
 		        	System.out.println("Enter the Money to be stored in the account: ");
 	            	String mon = scan.next();
 	            	double moneyvalue = 0;
 	                try {
 	                	moneyvalue = Double.parseDouble(mon);
-	                	depMoney = moneyvalue;
-	                	if(depMoney > 0){
-			            	TransactionAPI.depositMoney(userdetail, depMoney);
+	                	depositMoney = moneyvalue;
+	                	if(depositMoney > 0 && depositMoney < 999999999){
+			            	TransactionAPI.depositMoney(userdetail, depositMoney);
 			                System.out.println("Money Deposited succesfully. Updated Balance is Rs."+Math.round(userdetail.getMoney() * 100.0) / 100.0);
 			                try {
 			 	       			BankRecordWriter.writeUserDB(userH.usersMap);	
@@ -134,7 +134,7 @@ public class MainMenu {
 	                try {
 	                	moneyvalue = Double.parseDouble(mon);
 	                	withdrawMoney = moneyvalue;
-	                	if(withdrawMoney > 0){
+	                	if(withdrawMoney > 0 && withdrawMoney < 999999999){
 			            	TransactionAPI.withdrawMoney(userdetail, withdrawMoney);
 			                System.out.println("Money Withdrawal succesful. Updated Balance is Rs."+Math.round(userdetail.getMoney() * 100.0) / 100.0);
 			                try {
@@ -234,7 +234,7 @@ public class MainMenu {
 		try {
 			BSE = BankRecordWriter.readStockInformation();
 			System.out.println("Loading and updating stock informations and prices !!");
-			BSE.loadCurrentSharePrices();
+			BSE.loadCurrentSharePrices(usersMap);
 		} catch(IOException e) {
 			System.out.println("Loading your stocks !!");
 			BSE = BankRecordWriter.writeDummyStockData();
