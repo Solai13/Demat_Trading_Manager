@@ -135,15 +135,18 @@ public class MainMenu {
 	                	moneyvalue = Double.parseDouble(mon);
 	                	withdrawMoney = moneyvalue;
 	                	if(withdrawMoney > 0 && withdrawMoney < 999999999){
-			            	TransactionAPI.withdrawMoney(userdetail, withdrawMoney);
-			                System.out.println("Money Withdrawal succesful. Updated Balance is Rs."+Math.round(userdetail.getMoney() * 100.0) / 100.0);
-			                try {
-			 	       			BankRecordWriter.writeUserDB(userH.usersMap);	
-			 	       		} catch(IOException e) {
-			 	       			System.out.println("User Database not found !");
-			 	       			System.exit(0);
-			 	       		}
-		                	break;
+			            	if(TransactionAPI.withdrawMoney(userdetail, withdrawMoney)) {
+			            		System.out.println("Money Withdrawal succesful. Updated Balance is Rs."+Math.round(userdetail.getMoney() * 100.0) / 100.0);
+				                try {
+				 	       			BankRecordWriter.writeUserDB(userH.usersMap);	
+				 	       		} catch(IOException e) {
+				 	       			System.out.println("User Database not found !");
+				 	       			System.exit(0);
+				 	       		}
+			                	break;
+			            	} else {
+		                		continue;
+		                	}
 	                	} else {
 	                		System.out.println("\n>> Invalid Amount !");
 	                		continue;

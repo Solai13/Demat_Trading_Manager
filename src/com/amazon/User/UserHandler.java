@@ -27,7 +27,7 @@ public class UserHandler implements Serializable{
         while(true) {
 	        System.out.print(">> Enter a password: ");
 	        passWord = scan.next();
-	        if(passWord.length() > 6) {
+	        if(passWord.length() >= 6) {
 		        break;	
 	        }else {
 	        	System.out.println(">> Enter a strong password of minimum 6 characters !");

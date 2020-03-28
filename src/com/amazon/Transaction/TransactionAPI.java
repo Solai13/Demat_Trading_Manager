@@ -161,7 +161,7 @@ public class TransactionAPI {
              System.out.println("Total amount to be credited for selling "+sharesToSell+" shares is Rs."+finalAmount);
              if(BSE.updateSharesInMarket(shareName, "Add", sharesToSell, bseStock.getSharePrice()) && user.userHandler.updateSharesInMarket(shareName, "Remove", sharesToSell, bseStock.getSharePrice())) {
             	 depositMoney(user, finalAmount); //calls deposit function to deposit the money to user's wallet
-            	 System.out.println("Shares sold successful");
+            	 System.out.println("Shares sold successfully");
             	 try {
                 	 transactionID = (int) BankRecordWriter.readTransactionNumber();
                 	 transactionID += 1;
@@ -173,7 +173,7 @@ public class TransactionAPI {
 		                   BankRecordWriter.writeTransactionNumber(transactionID);
 	               }
             	 BankRecordWriter.writeTransactionNumber(transactionID);
-            	 user.transactionReport.add(new Transaction(transactionID, "Sell", LocalDate.now(), LocalTime.now(), shareName, bseStock.getSharePrice(), sharesToSell, finalAmount));
+            	 user.transactionReport.add(new Transaction(transactionID, "Sell", LocalDate.now(), LocalTime.now().minusNanos(60000), shareName, bseStock.getSharePrice(), sharesToSell, finalAmount));
              }
              return true;
       }       

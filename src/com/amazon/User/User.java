@@ -50,10 +50,10 @@ public class User implements Serializable{
 				buffer.append("\n *********** List of shares in possession ***********");
 				for(Stock stock : filteredStock) {
 						buffer.append(stock);
-		        }	
+		        }
+				buffer.append("\n Note: Stock price displayed is last traded price at which the stock was brought/sold");
 			}
 		}
-		buffer.append("\n Note: Stock price displayed is last traded price at which the stock was brought/sold");
 		buffer.append("\n----------------------------------------");
 		return buffer.toString();
 	}
